@@ -136,7 +136,7 @@ class PuntoLuminoso {
     return this.colorePunto;
   }
 
-  public void setColoreSole(color colorePunto) {
+  public void setColorePunto(color colorePunto) {
     this.colorePunto = colorePunto;
   }
   
