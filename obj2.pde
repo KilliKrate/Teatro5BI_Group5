@@ -1,4 +1,4 @@
-class Montagna { //<>//
+class Montagna {
   
   float roughness;
   float displacement;
