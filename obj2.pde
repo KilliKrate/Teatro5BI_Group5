@@ -65,15 +65,17 @@ class Montagna {
   }
   
   public void display(float canvasHeight, color colore) {
-    noStroke();
     fill(colore);
     beginShape();
+    
     vertex(this.points[0][0], canvasHeight);
     for (int i = 0; i < this.points.length; i++) {
       vertex(this.points[i][0], this.points[i][1]);
     }
     vertex(this.points[this.points.length-1][0], canvasHeight);
+    
     endShape(CLOSE);
+    noFill();
   }
   
   public float[] getMidpoint(float x1, float y1, float x2, float y2) {
