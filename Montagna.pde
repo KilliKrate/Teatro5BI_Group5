@@ -83,6 +83,10 @@ class Montagna {
     return midpoint;
   }
   
+  public float getMiddleY() {
+    return this.points[this.points.length/2][1];
+  }
+  
   private float avg(float n1, float n2){
     return (n1+n2)/2;
   }
