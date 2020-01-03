@@ -3,6 +3,13 @@
   * @author Ovidiu Costin Andrioaia
 */
 
+enum Direction {
+  LEFT,
+  RIGHT,
+  UP,
+  DOWN
+}
+
 class Montagna {
   
   // Coefficiente di riduzione del displacement.
@@ -13,6 +20,8 @@ class Montagna {
   
   // Punti della linea calcolati.
   float[][] points;
+  float[][] ogPoints;
+  Direction dir;
   
   /** Crea una linea "montagnosa" con coordinate di inizio e di fine, un coeff. di decadimento ed una distanza
    *
@@ -29,6 +38,7 @@ class Montagna {
     // Di default il displacement è pari all'altezza della montagna. 
     this.displacement = abs(y1 - y2);
     this.decay = decay;
+    this.dir = dir;
     
     // Creo l'array di punti che, collegati, formano la montagna. Esso avrà sempre lunghezza 2^N + 1
     // perchè questo rende la distanza coerente (mi aspetto che un valore distanza di 2 sia doppiamente
@@ -42,6 +52,7 @@ class Montagna {
     this.points[points.length - 1][1] = y2;
     
     this.points = this.computeDisplacement(points);
+    this.ogPoints = this.points;
   }
   
   /** Crea una linea "montagnosa" con coordinate di inizio e di fine, un coeff. di decadimento ed una distanza.
@@ -68,6 +79,7 @@ class Montagna {
     this.points[points.length - 1][1] = y2;
        
     this.points = this.computeDisplacement(points);
+    this.ogPoints = this.points;
   }
   
   /** Questa funzione è responsabile della creazione della linea che definisce la montagna. Esso adotta un
@@ -137,8 +149,54 @@ class Montagna {
     endShape();
   }
   
-  public void move() {
-    
+  public void move(int distance, Direction dir) {
+    switch (dir) {
+      case LEFT:
+        for (float[] point: this.points)
+          point[0] -= distance;
+        break;
+        
+      case RIGHT:
+        for (float[] point: this.points)
+          point[0] += distance;
+        break;
+        
+      case UP:
+        for (float[] point: this.points)
+          point[1] += distance;
+        break;
+        
+      case DOWN:
+        for (float[] point: this.points)
+          point[1] -= distance;
+        break;
+        
+      default:
+        break;
+    }
+  }
+  
+  public void scaleX(float scale, Direction dir) {
+    switch (dir) {
+      case LEFT:
+        for (int i = 0; i < this.ogPoints.length; i++)
+          this.points[i][0] = (this.points[i][0] - this.ogPoints[i][0]) * scale + this.ogPoints[i][0];
+        break;
+        
+      case RIGHT:
+        for (int i = 0; i < this.ogPoints.length; i++)
+          this.points[i][0] = (this.points[i][0] - this.ogPoints[i][0]) * scale;
+        break;
+        
+      default:
+        break;
+    } //<>//
+  }
+  
+  public void scaleY(float scale) {
+    for (int i = 0; i < this.ogPoints.length; i++) {
+      this.points[i][1] = height - (height - this.ogPoints[i][1]) * scale;
+    }
   }
   
   /** Questa funzione disegna la montagna come una forma geometrica che parte dall'inizio verticale del canvas
