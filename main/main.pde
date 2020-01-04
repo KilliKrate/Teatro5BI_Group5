@@ -1,29 +1,54 @@
-Montagna m2;
-Montagna m3;
-Montagna m4;
-Montagna m5;
+Montagna m1, m2, m3, m4, m11, m22,m33, m44;
 PuntoLuminoso s;
+
+float t, y;
 
 public void settings() {
   size(1920, 1080);
 }
 
-void setup() {  
-  m2 = new Montagna(480, height, width, 648, 1.4, 19, 40);
-  m3 = new Montagna(0, 691, width, 907, 1.2, 20, 60);
-  m4 = new Montagna(0, 497, width, 670, 1, 16, 80);
-  m5 = new Montagna(0, 324, width, 389, 0.9, 14, 120);
-  s = new PuntoLuminoso(width/2, m5.getMiddleY(), 50.0, 600.0, 200, 0, color(252, 183, 74), color(255, 132, 0));
+void setup() {
+  frameRate(24);
+  m1 = new Montagna(0, 648, width/2, height, 1.4, 9, 40);
+  m2 = new Montagna(0, 907, width/2, 691, 1.2, 9, 60);
+  m3 = new Montagna(0, 670, width/2, 497, 1, 6, 80);
+  m4 = new Montagna(0, 389, width/2, 324, 0.9, 6, 120);
   
+  m11 = new Montagna(width/2, height, width, 648, 1.4, 9, 40);
+  m22 = new Montagna(width/2, 691, width, 907, 1.2, 9, 60);
+  m33 = new Montagna(width/2, 497, width, 670, 1, 6, 80);
+  m44 = new Montagna(width/2, 324, width, 389, 0.9, 6, 120);
+  s = new PuntoLuminoso(width/2, m4.getLastY(), 50.0, 600.0, 200, 0, color(252, 183, 74), color(255, 132, 0));
+}
+
+void draw() {
   background(38, 42, 90);
   s.display();
-  stroke(color(255, 132, 0));
-  strokeWeight(4);
-  m5.display(lerpColor(color(69, 65, 58), color(255, 132, 0), 0.3));
-  noStroke();
-  m4.display(lerpColor(color(99, 94, 83), color(255, 132, 0), 0.2));
-  m3.display(lerpColor(color(153, 145, 130), color(255, 132, 0), 0.1));
-  m2.scaleX(1, Direction.LEFT);
-  m2.display(lerpColor(color(196, 186, 167), color(255, 132, 0), 0));
-
+  
+  if (frameCount < 144) {
+    
+    t = map(frameCount, 0, 144, 0, 1);
+    y = pow(t, 2);
+        
+    m1.scaleY(y);
+    m2.scaleY(y);
+    m3.scaleY(y);
+    m4.scaleY(y);
+    m11.scaleY(y);
+    m22.scaleY(y);
+    m33.scaleY(y);
+    m44.scaleY(y);
+  }
+   //<>//
+  m4.display(color(150, 150, 150));
+  m44.display(color(150, 150, 150));
+  m3.display(color(122, 122, 122));
+  m33.display(color(122, 122, 122));
+  m2.display(color(105, 105, 105));
+  m22.display(color(105, 105, 105));
+  m1.display(color(84, 84, 84));
+  m11.display(color(84, 84, 84));
+  
+  saveFrame("line-####.tif");
+  
 }

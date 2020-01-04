@@ -21,7 +21,6 @@ class Montagna {
   // Punti della linea calcolati.
   float[][] points;
   float[][] ogPoints;
-  Direction dir;
   
   /** Crea una linea "montagnosa" con coordinate di inizio e di fine, un coeff. di decadimento ed una distanza
    *
@@ -38,7 +37,6 @@ class Montagna {
     // Di default il displacement è pari all'altezza della montagna. 
     this.displacement = abs(y1 - y2);
     this.decay = decay;
-    this.dir = dir;
     
     // Creo l'array di punti che, collegati, formano la montagna. Esso avrà sempre lunghezza 2^N + 1
     // perchè questo rende la distanza coerente (mi aspetto che un valore distanza di 2 sia doppiamente
@@ -52,7 +50,10 @@ class Montagna {
     this.points[points.length - 1][1] = y2;
     
     this.points = this.computeDisplacement(points);
-    this.ogPoints = this.points;
+    this.ogPoints = new float[this.points.length][2];
+    
+    for (int i = 0; i < this.points.length; i++)
+      arrayCopy(this.points[i], this.ogPoints[i]);
   }
   
   /** Crea una linea "montagnosa" con coordinate di inizio e di fine, un coeff. di decadimento ed una distanza.
@@ -79,7 +80,10 @@ class Montagna {
     this.points[points.length - 1][1] = y2;
        
     this.points = this.computeDisplacement(points);
-    this.ogPoints = this.points;
+    this.ogPoints = new float[this.points.length][2];
+    
+    for (int i = 0; i < this.points.length; i++)
+      arrayCopy(this.points[i], this.ogPoints[i]);
   }
   
   /** Questa funzione è responsabile della creazione della linea che definisce la montagna. Esso adotta un
@@ -110,10 +114,10 @@ class Montagna {
           float tempDisp = int(random(0, 2)) == 1 ? this.displacement : -this.displacement;
           
           // La posizione in x è semplicemente la x media dei due estremi
-          ptArr[int(this.avg(i, i+dist))][0] = this.avg(ptArr[i][0], ptArr[i+dist][0]); //<>//
+          ptArr[int(this.avg(i, i+dist))][0] = this.avg(ptArr[i][0], ptArr[i+dist][0]);
           
           // La posizione in y è la y media dei due estremi più (o meno) il displacement.
-          ptArr[int(this.avg(i, i+dist))][1] = this.avg(ptArr[i][1], ptArr[i+dist][1]) + tempDisp; //<>//
+          ptArr[int(this.avg(i, i+dist))][1] = this.avg(ptArr[i][1], ptArr[i+dist][1]) + tempDisp;
         }
         
         // Ogni ciclo interno termina quando raggiungo la fine dell'array.
@@ -179,24 +183,23 @@ class Montagna {
   public void scaleX(float scale, Direction dir) {
     switch (dir) {
       case LEFT:
-        for (int i = 0; i < this.ogPoints.length; i++)
-          this.points[i][0] = (this.points[i][0] - this.ogPoints[i][0]) * scale + this.ogPoints[i][0];
+        for (int i = 1; i < this.ogPoints.length; i++)
+          this.points[i][0] = (abs(this.ogPoints[i][0] - this.ogPoints[0][0])) * scale + this.ogPoints[0][0];
         break;
         
       case RIGHT:
-        for (int i = 0; i < this.ogPoints.length; i++)
-          this.points[i][0] = (this.points[i][0] - this.ogPoints[i][0]) * scale;
+        for (int i = 0; i < this.ogPoints.length - 1; i++)
+          this.points[i][0] = this.ogPoints[this.ogPoints.length - 1][0] - (abs(this.ogPoints[this.ogPoints.length - 1][0] - this.ogPoints[i][0])) * scale;
         break;
         
       default:
         break;
-    } //<>//
+    }
   }
   
   public void scaleY(float scale) {
-    for (int i = 0; i < this.ogPoints.length; i++) {
+    for (int i = 0; i < this.ogPoints.length; i++)
       this.points[i][1] = height - (height - this.ogPoints[i][1]) * scale;
-    }
   }
   
   /** Questa funzione disegna la montagna come una forma geometrica che parte dall'inizio verticale del canvas
@@ -230,8 +233,8 @@ class Montagna {
     this.points[index] = values;
   }
   
-  public float getMiddleY() {
-    return this.points[this.points.length/2][1];
+  public float getLastY() {
+    return this.points[this.points.length-1][1];
   }
   
   private float avg(float n1, float n2){
