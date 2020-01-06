@@ -139,19 +139,7 @@ class Montagna {
     return ptArr;
   }
   
-  /** 
-   * Questa funzione disegna la linea così com'è
-  */
   
-  public void display() {
-    noStroke();
-    noFill();
-    beginShape();
-    for (int i = 0; i < this.points.length; i++) {
-      vertex(this.points[i][0], this.points[i][1]);
-    }
-    endShape();
-  }
   
   public void move(int distance, Direction dir) {
     switch (dir) {
@@ -200,6 +188,20 @@ class Montagna {
   public void scaleY(float scale) {
     for (int i = 0; i < this.ogPoints.length; i++)
       this.points[i][1] = height - (height - this.ogPoints[i][1]) * scale;
+  }
+  
+  /** 
+   * Questa funzione disegna la linea così com'è
+  */
+  
+  public void display() {
+    noStroke();
+    noFill();
+    beginShape();
+    for (int i = 0; i < this.points.length; i++) {
+      vertex(this.points[i][0], this.points[i][1]);
+    }
+    endShape();
   }
   
   /** Questa funzione disegna la montagna come una forma geometrica che parte dall'inizio verticale del canvas
