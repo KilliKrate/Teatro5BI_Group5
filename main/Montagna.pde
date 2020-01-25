@@ -22,6 +22,8 @@ class Montagna {
   float[][] points;
   float[][] ogPoints;
   
+  color colour;
+  
   /** Crea una linea "montagnosa" con coordinate di inizio e di fine, un coeff. di decadimento ed una distanza
    *
    * @param x1 Coordinata X dell'inizio della montagna.
@@ -69,10 +71,11 @@ class Montagna {
                          Più è basso, più la linea risulterà "pianeggiante". Più è alto, più la linea risulterà "ripida".
   */
   
-  public Montagna(float x1, float y1, float x2, float y2, float decay, int distance, float displacement) {
+  public Montagna(float x1, float y1, float x2, float y2, float decay, int distance, float displacement, color colour) {
     this.displacement = displacement;
     this.decay = decay;
     this.points = new float[int(pow(2, distance)+1)][2];
+    this.colour = colour;
     
     this.points[0][0] = x1;
     this.points[0][1] = y1;
@@ -190,27 +193,14 @@ class Montagna {
       this.points[i][1] = height - (height - this.ogPoints[i][1]) * scale;
   }
   
-  /** 
-   * Questa funzione disegna la linea così com'è
-  */
-  
-  public void display() {
-    noStroke();
-    noFill();
-    beginShape();
-    for (int i = 0; i < this.points.length; i++) {
-      vertex(this.points[i][0], this.points[i][1]);
-    }
-    endShape();
-  }
-  
   /** Questa funzione disegna la montagna come una forma geometrica che parte dall'inizio verticale del canvas
    * riempiendola con un colore a scelta
    *
    * @param colore il colore della montagna
   */
-  public void display(color colore) {
-    fill(colore);
+  
+  public void display() {
+    fill(colour);
     beginShape();
     
     vertex(this.points[0][0], height);
@@ -239,8 +229,18 @@ class Montagna {
     return this.points[this.points.length-1][1];
   }
   
+  public color getColour() {
+    return this.colour;
+  }
+  
+  public void setColour(color colour) {
+    this.colour = colour;
+  }
+  
   private float avg(float n1, float n2){
     return (n1+n2)/2;
   }
+  
+  
   
 }
