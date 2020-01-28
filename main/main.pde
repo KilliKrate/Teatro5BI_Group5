@@ -1,10 +1,12 @@
 Montagna[][] montagne;
 CieloStellato cieloGrande;
 PuntoLuminoso s;
+Immagine ai, aimask;
 color[] colori;
+// Intero che calcola la variazione della trasparenza delle immagini
+int alphaImage;
 
 float t, y, rectHeight;
-int alpha = 0, posx = 0, posy = 0;
 int scene1 = 480, scene2 = 960, scene3 = 1440;
 
 public void settings() {
@@ -28,17 +30,60 @@ void setup() {
   s = new PuntoLuminoso(width/2, height, 50.0, 900.0, 200, 0, color(252, 183, 74), color(255, 132, 0));
   cieloGrande = new CieloStellato(750, 0, 3, 0, 2 * PI);
   cieloGrande.setSpeed(0.002);
-
-
+  
+  // Definisco i due oggetti Immagine, una l'immagine vera e propria, e l'altra la sua maschera
+  
+  ai = new Immagine(0, 0, "ai.jpg");
+  aimask = new Immagine(0, 0, "ai_mask.png");
+  
+  // Carico le immagini
+  
+  ai.load();
+  aimask.load();
+  
+  // Rimpicciolisco le immagini
+  
+  ai.reSize(ai.getWidth() / 2, ai.getHeight() / 2);
+  aimask.reSize(aimask.getWidth() / 2, aimask.getHeight() / 2);
+  
+  // Applico la maschera
+  
+  ai.maschera(aimask.getImg());
 }
 
 void draw() {
+ 
   if (frameCount <= scene1) {
     background(lerpColor(color(252, 183, 74), color(38, 42, 90), map(frameCount, 0, scene1, 0.7, 1)));
     s.display();    
     t = map(frameCount, 0, scene1, 1, 0);
     y = 1-pow(t, 2.6);
     
+    // Sposto l'immagine sull'asse x
+    ai.setX(frameCount * 2);
+    // Sposto la sua maschera
+    aimask.setX(frameCount * 2);
+    // Rendo la maschera trasparente
+    aimask.setTint(255, 0);
+    // Disegno la maschera
+    aimask.display();
+    
+    // Test per vedere la dinamicità della trasparenza
+    if (frameCount <= 50){
+      alphaImage += 1;
+      ai.setTint(255, alphaImage);
+      ai.display();
+    }
+    else if(frameCount > 50 && frameCount <= 100){
+      ai.setTint(255, alphaImage);
+      ai.display();
+    }
+    else{
+      alphaImage -= 1;
+      ai.setTint(255, alphaImage);
+      ai.display(); 
+    }
+
     montagne[0][0].setColour(lerpColor(color(242, 176, 102), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
     montagne[0][1].setColour(lerpColor(color(242, 176, 102), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
     montagne[1][0].setColour(lerpColor(color(177, 91, 58), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
@@ -64,6 +109,8 @@ void draw() {
     fill(0, 0, 0);
     rect(0, height, width, rectHeight);
     noFill();
+    
+    
   } 
 
   if ( frameCount > scene1 && frameCount <= scene2) {
@@ -134,6 +181,5 @@ void draw() {
     }
   }  
   
-  saveFrame("line-####.tif"); 
-
+  // saveFrame("line-####.tif"); 
 }
