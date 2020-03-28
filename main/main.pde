@@ -10,7 +10,7 @@ float t, y, rectHeight;
 int scene1 = 480, scene2 = 960, scene3 = 1440;
 
 public void settings() {
-  size(1920, 1080);
+  size(1920, 1080, P2D);
 }
 
 void setup() {
@@ -93,10 +93,17 @@ void draw() {
     montagne[3][0].setColour(lerpColor(color(50, 19, 25), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
     montagne[3][1].setColour(lerpColor(color(50, 19, 25), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
     
-    for (Montagna[] m : montagne) {
-      m[0].scaleY(y);
-      m[1].scaleY(y);
-    }
+    montagne[0][0].moveY(map(y, 0, 1, 0, height), Direction.RIGHT); //<>//
+    montagne[0][1].moveY(map(y, 0, 1, 0, height), Direction.LEFT);
+    
+    montagne[0][0].scaleY(y, Direction.RIGHT);
+    montagne[0][1].scaleY(y, Direction.LEFT);
+    montagne[1][0].scaleY(map(y, 0, 1, 0.5, 1), Direction.UP);
+    montagne[1][1].scaleY(map(y, 0, 1, 0.5, 1), Direction.UP);
+    montagne[2][0].scaleY(map(y, 0, 1, 0.75, 1), Direction.UP);
+    montagne[2][1].scaleY(map(y, 0, 1, 0.75, 1), Direction.UP);
+    montagne[3][0].scaleY(map(y, 0, 1, 0.875, 1), Direction.UP);
+    montagne[3][1].scaleY(map(y, 0, 1, 0.875, 1), Direction.UP);
     
     for (int i = 3; i >= 0; i--) {
        montagne[i][0].display();

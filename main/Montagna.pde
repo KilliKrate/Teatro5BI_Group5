@@ -142,30 +142,36 @@ class Montagna {
     return ptArr;
   }
   
-  
-  
-  public void move(int distance, Direction dir) {
+  public void moveY(float y, Direction dir) {
+    float distance;
     switch (dir) {
       case LEFT:
-        for (float[] point: this.points)
-          point[0] -= distance;
+        distance = y - this.ogPoints[0][1];
+        
+        print(distance + "\n" + this.ogPoints[0][1] + "\n\n");
+        
+        for (float[] point: this.ogPoints)
+          point[1] += distance;
+          
+        for (int i = 0; i < this.ogPoints.length; i++)
+          arrayCopy(this.ogPoints[i], this.points[i]);
+        
         break;
         
       case RIGHT:
-        for (float[] point: this.points)
-          point[0] += distance;
-        break;
+        distance = y - this.getOgLastY();
         
-      case UP:
-        for (float[] point: this.points)
+        print(distance + "\n" + this.getOgLastY() + "\n\n");
+        
+        for (float[] point: this.ogPoints)
           point[1] += distance;
+          ;
+        for (int i = 0; i < this.ogPoints.length; i++)
+          arrayCopy(this.ogPoints[i], this.points[i]);
         break;
-        
+      
+      case UP:
       case DOWN:
-        for (float[] point: this.points)
-          point[1] -= distance;
-        break;
-        
       default:
         break;
     }
@@ -188,9 +194,29 @@ class Montagna {
     }
   }
   
-  public void scaleY(float scale) {
-    for (int i = 0; i < this.ogPoints.length; i++)
-      this.points[i][1] = height - (height - this.ogPoints[i][1]) * scale;
+  public void scaleY(float scale, Direction dir) {
+    switch (dir) {
+      case LEFT:
+      for (int i = 0; i < this.ogPoints.length; i++)
+        this.points[i][1] = this.ogPoints[0][1] - (this.ogPoints[0][1] - this.ogPoints[i][1]) * scale;
+      break;
+        
+      case RIGHT:
+        for (int i = 0; i < this.ogPoints.length; i++)
+          this.points[i][1] = this.getOgLastY() - (this.getOgLastY() - this.ogPoints[i][1]) * scale;
+        break;
+      case UP:
+        for (int i = 0; i < this.ogPoints.length; i++)
+          this.points[i][1] = height - (height - this.ogPoints[i][1]) * scale;
+        break;
+        
+      case DOWN:
+        break;
+        
+      default:
+        break;
+    }
+    
   }
   
   /** Questa funzione disegna la montagna come una forma geometrica che parte dall'inizio verticale del canvas
@@ -227,6 +253,10 @@ class Montagna {
   
   public float getLastY() {
     return this.points[this.points.length-1][1];
+  }
+  
+  public float getOgLastY() {
+    return this.ogPoints[this.ogPoints.length-1][1];
   }
   
   public color getColour() {
