@@ -1,10 +1,8 @@
 Montagna[][] montagne;
 CieloStellato cieloGrande;
 PuntoLuminoso s;
-Immagine ai, aimask;
+Immagine robot;
 color[] colori;
-// Intero che calcola la variazione della trasparenza delle immagini
-int alphaImage;
 
 float t, y, rectHeight;
 int scene1 = 480, scene2 = 960, scene3 = 1440;
@@ -31,24 +29,14 @@ void setup() {
   cieloGrande = new CieloStellato(750, 0, 3, 0, 2 * PI);
   cieloGrande.setSpeed(0.002);
   
-  // Definisco i due oggetti Immagine, una l'immagine vera e propria, e l'altra la sua maschera
-  
-  ai = new Immagine(0, 0, "ai.jpg");
-  aimask = new Immagine(0, 0, "ai_mask.png");
-  
-  // Carico le immagini
-  
-  ai.load();
-  aimask.load();
-  
-  // Rimpicciolisco le immagini
-  
-  ai.reSize(ai.getWidth() / 2, ai.getHeight() / 2);
-  aimask.reSize(aimask.getWidth() / 2, aimask.getHeight() / 2);
-  
+  // Definisco l'istanza di Immagine
+  robot = new Immagine(0, 0, 0, "ai.jpg", "ai_mask.png");
+  // Carico l'immagine
+  robot.load();
+  // Rimpicciolisco l'immagine
+  robot.reSize(robot.getWidth() / 2, robot.getHeight() / 2);
   // Applico la maschera
-  
-  ai.maschera(aimask.getImg());
+  robot.useMask();
 }
 
 void draw() {
@@ -60,30 +48,22 @@ void draw() {
     y = 1-pow(t, 2.6);
     
     // Sposto l'immagine sull'asse x
-    ai.setX(frameCount * 2);
-    // Sposto la sua maschera
-    aimask.setX(frameCount * 2);
-    // Rendo la maschera trasparente
-    aimask.setTint(255, 0);
-    // Disegno la maschera
-    aimask.display();
-    
+    robot.setX(frameCount * 2);
     // Test per vedere la dinamicità della trasparenza
-    if (frameCount <= 50){
-      alphaImage += 1;
-      ai.setTint(255, alphaImage);
-      ai.display();
+    
+    if (frameCount <= scene1 / 4 && frameCount >= scene1 / 8){
+      robot.increaseAlpha(0.5);
+      robot.setTint();
+      robot.display();
     }
-    else if(frameCount > 50 && frameCount <= 100){
-      ai.setTint(255, alphaImage);
-      ai.display();
+    else if(frameCount > scene1 / 4 && frameCount <= scene1 / 2){
+      robot.display();
     }
-    else{
-      alphaImage -= 1;
-      ai.setTint(255, alphaImage);
-      ai.display(); 
+    else if(frameCount > scene1 / 2 && frameCount <= scene1){
+      robot.decreaseAlpha(0.5);
+      robot.setTint();
+      robot.display();
     }
-
     montagne[0][0].setColour(lerpColor(color(242, 176, 102), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
     montagne[0][1].setColour(lerpColor(color(242, 176, 102), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
     montagne[1][0].setColour(lerpColor(color(177, 91, 58), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
