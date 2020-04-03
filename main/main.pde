@@ -2,6 +2,7 @@ Montagna[][] montagne;
 CieloStellato cieloGrande;
 PuntoLuminoso s;
 Immagine robot;
+Particella[] particelle = new Particella[100];
 color[] colori;
 
 float t, y, rectHeight;
@@ -29,6 +30,9 @@ void setup() {
   cieloGrande = new CieloStellato(750, 0, 3, 0, 2 * PI);
   cieloGrande.setSpeed(0.002);
   
+  for(int i = 0; i < particelle.length; i++){
+      particelle[i] = new Particella();
+  }
   // Definisco l'istanza di Immagine
   robot = new Immagine(0, 0, 0, "ai.jpg", "ai_mask.png");
   // Carico l'immagine
@@ -89,6 +93,11 @@ void draw() {
        montagne[i][0].display();
        montagne[i][1].display();
     }
+    for(int i = 0; i < particelle.length; i++){
+        particelle[i].show();
+        particelle[i].update();
+    }
+    
 
     rectHeight = map(y, 0, 1, -height, 0);
     s.setY(montagne[3][0].getLastY());
@@ -98,8 +107,9 @@ void draw() {
     noFill();
     
     
+    
   } 
-
+  
   if ( frameCount > scene1 && frameCount <= scene2) {
     background(lerpColor(color(38, 42, 90), color(#0d0f16), map(frameCount, scene1, scene2, 0, 1)), map(frameCount, scene1, scene2, 100, 0));
     
