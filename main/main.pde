@@ -33,6 +33,10 @@ void setup() {
   for(int i = 0; i < particelle.length; i++){
       particelle[i] = new Particella();
   }
+  
+  //montagne[1][0].generateGrass(5000, 3, 5);
+  //montagne[1][1].generateGrass(5000, 3, 5);
+  
   // Definisco l'istanza di Immagine
   robot = new Immagine(0, 0, 0, "ai.jpg", "ai_mask.png");
   // Carico l'immagine

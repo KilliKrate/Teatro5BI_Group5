@@ -22,6 +22,9 @@ class Montagna {
   float[][] points;
   float[][] ogPoints;
   
+  // ArrayList che contiene i fili d'erba
+  ArrayList<FiloErba> bs;
+  
   color colour;
   
   /** Crea una linea "montagnosa" con coordinate di inizio e di fine, un coeff. di decadimento ed una distanza
@@ -76,7 +79,7 @@ class Montagna {
     this.decay = decay;
     this.points = new float[int(pow(2, distance)+1)][2];
     this.colour = colour;
-    
+    this.bs = new ArrayList<FiloErba>();
     this.points[0][0] = x1;
     this.points[0][1] = y1;
     this.points[points.length - 1][0] = x2;
@@ -107,18 +110,13 @@ class Montagna {
     
     // Quando la distanza si riduce a 1, significa che ogni punto dell'array è stato definito, e posso terminare il ciclo
     while (dist != 1.0) {
-      
       while (true) {
-        
         // Se il punto centrale ai due estremi e i+dist è uguale a 0, significa che non è ancora stato definito
         if (ptArr[int(this.avg(i, i+dist))][0] == 0.0) {
-          
           // Con un random scelgo se offsettare il punto verso l'alto o verso il basso.
           float tempDisp = int(random(0, 2)) == 1 ? this.displacement : -this.displacement;
-          
           // La posizione in x è semplicemente la x media dei due estremi
           ptArr[int(this.avg(i, i+dist))][0] = this.avg(ptArr[i][0], ptArr[i+dist][0]);
-          
           // La posizione in y è la y media dei due estremi più (o meno) il displacement.
           ptArr[int(this.avg(i, i+dist))][1] = this.avg(ptArr[i][1], ptArr[i+dist][1]) + tempDisp;
         }
@@ -142,13 +140,21 @@ class Montagna {
     return ptArr;
   }
   
+  public void generateGrass(int amount, int sizeStart, int sizeEnd) {
+    this.bs.clear();
+    float[] point;
+    for(int i=0; i<amount; i++) {
+      point = this.getRandomPoint();
+      this.bs.add(new FiloErba(point[0], point[1],int(random(sizeStart, sizeEnd)),1.0));
+    }
+  }
+  
   public void moveY(float y, Direction dir) {
     float distance;
     switch (dir) {
       case LEFT:
         distance = y - this.ogPoints[0][1];
         
-        print(distance + "\n" + this.ogPoints[0][1] + "\n\n");
         
         for (float[] point: this.ogPoints)
           point[1] += distance;
@@ -159,10 +165,7 @@ class Montagna {
         break;
         
       case RIGHT:
-        distance = y - this.getOgLastY();
-        
-        print(distance + "\n" + this.getOgLastY() + "\n\n");
-        
+        distance = y - this.getOgLastY();        
         for (float[] point: this.ogPoints)
           point[1] += distance;
           ;
@@ -237,6 +240,12 @@ class Montagna {
     
     endShape(CLOSE);
     noFill();
+    
+    for(FiloErba b : this.bs) {
+      b.update(-50, height/4, 1.5, 1.5);
+      b.draw();
+    }
+    
   }
   
   public float[][] getPoints() {
@@ -269,6 +278,18 @@ class Montagna {
   
   private float avg(float n1, float n2){
     return (n1+n2)/2;
+  }
+  
+  private float[] getRandomPoint() {
+    float x = random(this.points[0][0], this.points[this.points.length-1][0]);
+    float[] closestPoint = {0, 0};
+    for (float[] point : this.points) {
+      if (abs(x - point[0]) < abs(x - closestPoint[0]))
+        arrayCopy(point, closestPoint);
+    }
+    float y = random(closestPoint[1], height);
+    float[] point = {x, y};
+    return point;
   }
   
   
