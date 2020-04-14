@@ -6,7 +6,7 @@ Particella[] particelle = new Particella[100];
 color[] colori;
 
 float t, y, rectHeight;
-int scene1 = 480, scene2 = 960, scene3 = 1440;
+int scene1 = 480, scene2 = 960, scene3 = 1440, scene4 = 1920;
 
 public void settings() {
   size(1920, 1080, P2D);
@@ -50,8 +50,11 @@ void setup() {
 void draw() {
  
   if (frameCount <= scene1) {
-    background(lerpColor(color(252, 183, 74), color(38, 42, 90), map(frameCount, 0, scene1, 0.7, 1)));
-    s.display();    
+    fill(lerpColor(color(252, 183, 74), color(38, 42, 90), map(frameCount, 0, scene1, 0.7, 1)));
+    rect(0, 0, width, height);
+    noFill();
+    
+    s.display();
     t = map(frameCount, 0, scene1, 1, 0);
     y = 1-pow(t, 2.6);
     
@@ -109,17 +112,18 @@ void draw() {
     fill(0, 0, 0);
     rect(0, height, width, rectHeight);
     noFill();
-    
-    
-    
   } 
   
-  if ( frameCount > scene1 && frameCount <= scene2) {
-    background(lerpColor(color(38, 42, 90), color(#0d0f16), map(frameCount, scene1, scene2, 0, 1)), map(frameCount, scene1, scene2, 100, 0));
+  if (frameCount > scene1 && frameCount <= scene2) {
+    color backColor = lerpColor(color(38, 42, 90, 255), color(13, 15, 22, 0), map(frameCount, scene1, scene2, 0, 1));
+    fill((backColor & 0xffffff) | ((frameCount < 2*(scene2-scene1)/3+scene1) ? 255 : (int)map(frameCount, scene1, scene2, 25, 20)) << 24);
+    rect(0, 0, width, height);
+    noFill();
+    
     
     pushMatrix();
     translate(width/2, height/4 - 100);
-    cieloGrande.display((int)map(frameCount, (scene2-scene1)/2+scene1, scene2, 0, 255));  
+    cieloGrande.display((int)map(frameCount, 2*(scene2-scene1)/3+scene1, scene2, 0, 255));  
     popMatrix();   
     
     t = map(frameCount, scene1, scene2, 1, 0);
@@ -129,26 +133,26 @@ void draw() {
     s.setR2(map(frameCount, scene1, scene2, 900, 300));
     s.display();
     
-    float halfScene = scene1+(scene2-scene1)/4;
+    float quarterScene = scene1+(scene2-scene1)/4;
     
-    if (frameCount < halfScene) {
-      montagne[0][0].setColour(lerpColor(color(242, 176, 102), color(255, 132, 0), map(frameCount, scene1, halfScene, 0.3, 0)));
-      montagne[0][1].setColour(lerpColor(color(242, 176, 102), color(255, 132, 0), map(frameCount, scene1, halfScene, 0.3, 0)));
-      montagne[1][0].setColour(lerpColor(color(177, 91, 58), color(255, 132, 0), map(frameCount, scene1, halfScene, 0.3, 0)));
-      montagne[1][1].setColour(lerpColor(color(177, 91, 58), color(255, 132, 0), map(frameCount, scene1, halfScene, 0.3, 0)));
-      montagne[2][0].setColour(lerpColor(color(110, 44, 28), color(255, 132, 0), map(frameCount, scene1, halfScene, 0.3, 0)));
-      montagne[2][1].setColour(lerpColor(color(110, 44, 28), color(255, 132, 0), map(frameCount, scene1, halfScene, 0.3, 0)));
-      montagne[3][0].setColour(lerpColor(color(50, 19, 25), color(255, 132, 0), map(frameCount, scene1, halfScene, 0.3, 0)));
-      montagne[3][1].setColour(lerpColor(color(50, 19, 25), color(255, 132, 0), map(frameCount, scene1, halfScene, 0.3, 0)));
+    if (frameCount < quarterScene) {
+      montagne[0][0].setColour(lerpColor(color(242, 176, 102), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
+      montagne[0][1].setColour(lerpColor(color(242, 176, 102), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
+      montagne[1][0].setColour(lerpColor(color(177, 91, 58), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
+      montagne[1][1].setColour(lerpColor(color(177, 91, 58), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
+      montagne[2][0].setColour(lerpColor(color(110, 44, 28), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
+      montagne[2][1].setColour(lerpColor(color(110, 44, 28), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
+      montagne[3][0].setColour(lerpColor(color(50, 19, 25), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
+      montagne[3][1].setColour(lerpColor(color(50, 19, 25), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
     } else {
-      montagne[0][0].setColour(lerpColor(color(242, 176, 102), color(#0d0f16), map(frameCount, halfScene, scene2, 0, 0.8)));
-      montagne[0][1].setColour(lerpColor(color(242, 176, 102), color(#0d0f16), map(frameCount, halfScene, scene2, 0, 0.8)));
-      montagne[1][0].setColour(lerpColor(color(177, 91, 58), color(#0d0f16), map(frameCount, halfScene, scene2, 0, 0.8)));
-      montagne[1][1].setColour(lerpColor(color(177, 91, 58), color(#0d0f16), map(frameCount, halfScene, scene2, 0, 0.8)));
-      montagne[2][0].setColour(lerpColor(color(110, 44, 28), color(#0d0f16), map(frameCount, halfScene, scene2, 0, 0.8)));
-      montagne[2][1].setColour(lerpColor(color(110, 44, 28), color(#0d0f16), map(frameCount, halfScene, scene2, 0, 0.8)));
-      montagne[3][0].setColour(lerpColor(color(50, 19, 25), color(#0d0f16), map(frameCount, halfScene, scene2, 0, 0.8)));
-      montagne[3][1].setColour(lerpColor(color(50, 19, 25), color(#0d0f16), map(frameCount, halfScene, scene2, 0, 0.8)));
+      montagne[0][0].setColour(lerpColor(color(242, 176, 102), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
+      montagne[0][1].setColour(lerpColor(color(242, 176, 102), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
+      montagne[1][0].setColour(lerpColor(color(177, 91, 58), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
+      montagne[1][1].setColour(lerpColor(color(177, 91, 58), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
+      montagne[2][0].setColour(lerpColor(color(110, 44, 28), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
+      montagne[2][1].setColour(lerpColor(color(110, 44, 28), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
+      montagne[3][0].setColour(lerpColor(color(50, 19, 25), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
+      montagne[3][1].setColour(lerpColor(color(50, 19, 25), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
     }
     
     for (int i = 3; i >= 0; i--) {
@@ -158,13 +162,14 @@ void draw() {
 
   }
   
-  if ( frameCount > scene2 && frameCount <= scene3){
+  if (frameCount > scene2 && frameCount <= scene3){
     fill(color(13, 15, 22), map(frameCount, scene2, scene3, 10, 2));
     rect(0, 0, width, height);
+    noFill();
     
     pushMatrix();
     translate(width/2, height/4 - 100);
-    cieloGrande.display((int)map(frameCount, (scene2-scene1)/2+scene1, scene2, 0, 255));  
+    cieloGrande.display();
     popMatrix();
     
     montagne[0][0].setColour(lerpColor(color(242, 176, 102), color(#0d0f16), 0.8));
@@ -180,7 +185,45 @@ void draw() {
        montagne[i][0].display();
        montagne[i][1].display();
     }
-  }  
+  }
   
-  // saveFrame("line-####.tif"); 
+  if (frameCount > scene3 && frameCount <= scene4) {
+    color backColor = lerpColor(color(13, 15, 22), color(38, 42, 90), map(frameCount, scene3, scene4, 0, 1));
+    float oneSixth = (scene4-scene3)/6 + scene3;
+    
+    fill((backColor & 0xffffff) | (int)map(frameCount, scene3, scene4, 0, 255) << 24);
+    rect(0, 0, width, height);
+    noFill();
+    
+    pushMatrix();
+    translate(width/2, height/4 - 100);
+    cieloGrande.display((int)map(frameCount, scene3, oneSixth, 255, 0));
+    popMatrix();
+    
+    if (frameCount > oneSixth) {
+      t = map(frameCount, oneSixth, scene4, 1, 0);
+      y = pow(t, 2.6);
+      s.setY(map(y, 0, 1, montagne[3][0].getLastY(), height));
+    
+      s.setR2(map(frameCount, oneSixth, scene4, 300, 900));
+      s.display(); 
+    }
+    
+    montagne[0][0].setColour(lerpColor(color(242, 176, 102), color(#0d0f16), map(frameCount, scene3, scene4, 0.8, 0)));
+    montagne[0][1].setColour(lerpColor(color(242, 176, 102), color(#0d0f16), map(frameCount, scene3, scene4, 0.8, 0)));
+    montagne[1][0].setColour(lerpColor(color(177, 91, 58), color(#0d0f16), map(frameCount, scene3, scene4, 0.8, 0)));
+    montagne[1][1].setColour(lerpColor(color(177, 91, 58), color(#0d0f16), map(frameCount, scene3, scene4, 0.8, 0)));
+    montagne[2][0].setColour(lerpColor(color(110, 44, 28), color(#0d0f16), map(frameCount, scene3, scene4, 0.8, 0)));
+    montagne[2][1].setColour(lerpColor(color(110, 44, 28), color(#0d0f16), map(frameCount, scene3, scene4, 0.8, 0)));
+    montagne[3][0].setColour(lerpColor(color(50, 19, 25), color(#0d0f16), map(frameCount, scene3, scene4, 0.8, 0)));
+    montagne[3][1].setColour(lerpColor(color(50, 19, 25), color(#0d0f16), map(frameCount, scene3, scene4, 0.8, 0)));
+    
+    for (int i = 3; i >= 0; i--) {
+       montagne[i][0].display();
+       montagne[i][1].display();
+    }
+    
+  }
+  
+  saveFrame("line-####.tif"); 
 }
