@@ -34,8 +34,8 @@ void setup() {
       particelle[i] = new Particella();
   }
   
-  //montagne[1][0].generateGrass(5000, 3, 5);
-  //montagne[1][1].generateGrass(5000, 3, 5);
+  montagne[1][0].generateGrass(5000, 3, 5);
+  montagne[1][1].generateGrass(5000, 3, 5);
   
   // Definisco l'istanza di Immagine
   robot = new Immagine(0, 0, 0, "ai.jpg", "ai_mask.png");
@@ -77,8 +77,13 @@ void draw() {
     }
     montagne[0][0].setColour(lerpColor(color(242, 176, 102), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
     montagne[0][1].setColour(lerpColor(color(242, 176, 102), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
+    
     montagne[1][0].setColour(lerpColor(color(177, 91, 58), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
     montagne[1][1].setColour(lerpColor(color(177, 91, 58), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
+    
+    montagne[1][0].blendGrassGreen(color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3));
+    montagne[1][1].blendGrassGreen(color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3));
+    
     montagne[2][0].setColour(lerpColor(color(110, 44, 28), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
     montagne[2][1].setColour(lerpColor(color(110, 44, 28), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
     montagne[3][0].setColour(lerpColor(color(50, 19, 25), color(255, 132, 0), map(frameCount, 0, scene1, 0.5, 0.3)));
@@ -140,6 +145,10 @@ void draw() {
       montagne[0][1].setColour(lerpColor(color(242, 176, 102), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
       montagne[1][0].setColour(lerpColor(color(177, 91, 58), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
       montagne[1][1].setColour(lerpColor(color(177, 91, 58), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
+      
+      montagne[1][0].blendGrassGreen(color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0));
+      montagne[1][1].blendGrassGreen(color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0));
+      
       montagne[2][0].setColour(lerpColor(color(110, 44, 28), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
       montagne[2][1].setColour(lerpColor(color(110, 44, 28), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
       montagne[3][0].setColour(lerpColor(color(50, 19, 25), color(255, 132, 0), map(frameCount, scene1, quarterScene, 0.3, 0)));
@@ -149,6 +158,10 @@ void draw() {
       montagne[0][1].setColour(lerpColor(color(242, 176, 102), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
       montagne[1][0].setColour(lerpColor(color(177, 91, 58), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
       montagne[1][1].setColour(lerpColor(color(177, 91, 58), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
+      
+      montagne[1][0].blendGrassGreen(color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8));
+      montagne[1][1].blendGrassGreen(color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8));
+      
       montagne[2][0].setColour(lerpColor(color(110, 44, 28), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
       montagne[2][1].setColour(lerpColor(color(110, 44, 28), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
       montagne[3][0].setColour(lerpColor(color(50, 19, 25), color(#0d0f16), map(frameCount, quarterScene, scene2, 0, 0.8)));
@@ -225,5 +238,5 @@ void draw() {
     
   }
   
-  saveFrame("line-####.tif"); 
+  //saveFrame("line-####.tif"); 
 }

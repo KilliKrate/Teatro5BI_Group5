@@ -2,19 +2,23 @@ class FiloErba {
   float anchorx;
   float anchory;
   float offset;
-  color green;
+  color originalGreen;
+  color blendedGreen;
   float stiffness;
+  int nSegments;
   ArrayList<float[]> segments;
  
   FiloErba(float setAnchorx,float setAnchory, int setSegments, float preOffset) {
     anchorx = setAnchorx;
     anchory = setAnchory;
+    nSegments = setSegments;
     segments = new ArrayList<float[]>();
     for (int x = 0; x < setSegments; x++) {
       segments.add(new float[]{anchorx, anchory+10*x});
     }
     offset = random(100)/100 + preOffset;
-    green = color((int)random(0, 50), (int)random(100, 255), (int)random(0, 100));
+    originalGreen = lerpColor(color((int)random(0, 50), (int)random(100, 255), (int)random(0, 100)), color(0, 0, 0), 0.3);
+    this.blendedGreen = originalGreen;
     stiffness = random(1, 2);
     //grounding force
     segments.get(0)[0] = anchorx;
@@ -52,10 +56,35 @@ class FiloErba {
       }
     }
   }
+  
+  void blendGreen(color newColor, float amount) {
+    this.blendedGreen = lerpColor(this.originalGreen, newColor, amount);
+  }
+  
+  void move(float newAnchorX, float newAnchorY) {
+    this.anchorx = newAnchorX;
+    this.anchory = newAnchorY;
+    
+    this.segments.clear();
+    for (int x = 0; x < this.nSegments; x++) {
+      segments.add(new float[]{anchorx, anchory+10*x});
+    }
+    
+    segments.get(0)[0] = anchorx;
+    segments.get(0)[1] = anchory;
+  }
+  
+  float getAnchorX() {
+    return this.anchorx;
+  }
+  
+  float getAnchorY() {
+    return this.anchory;
+  }
  
   void draw() {
-    fill(green);
-    stroke(green);
+    fill(blendedGreen);
+    stroke(blendedGreen);
     int h = segments.size()-2;
     beginShape(TRIANGLE_STRIP);
       for (int x = 0; x < segments.size ()-1; x++) {

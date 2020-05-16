@@ -149,35 +149,80 @@ class Montagna {
     }
   }
   
+  public void blendGrassGreen(color newColor, float amount) {
+    for (FiloErba filo : this.bs)
+      filo.blendGreen(newColor, amount);
+  }
+  
   public void moveY(float y, Direction dir) {
     float distance;
     switch (dir) {
       case LEFT:
         distance = y - this.ogPoints[0][1];
-        
-        
+
         for (float[] point: this.ogPoints)
           point[1] += distance;
           
         for (int i = 0; i < this.ogPoints.length; i++)
           arrayCopy(this.ogPoints[i], this.points[i]);
+          
+        for (FiloErba filo : this.bs)
+          filo.move(filo.getAnchorX(), filo.getAnchorY() - distance);
         
         break;
         
       case RIGHT:
-        distance = y - this.getOgLastY();        
+        distance = y - this.getLastOgPoint()[1];        
         for (float[] point: this.ogPoints)
           point[1] += distance;
-          ;
+          
         for (int i = 0; i < this.ogPoints.length; i++)
           arrayCopy(this.ogPoints[i], this.points[i]);
-        break;
-      
+          
+        for (FiloErba filo : this.bs)
+          filo.move(filo.getAnchorX(), filo.getAnchorY() - distance);
+          
+      break;  
       case UP:
       case DOWN:
       default:
         break;
     }
+  }
+  
+  public void moveX(float x, Direction dir) {
+     float distance;
+     switch (dir) {
+       case LEFT:
+          distance = x - this.ogPoints[0][1];
+         
+          for (float[] point: this.ogPoints)
+            point[0] += distance;
+          
+          for (int i = 0; i < this.ogPoints.length; i++)
+            arrayCopy(this.ogPoints[i], this.points[i]);
+          
+          for (FiloErba filo : this.bs)
+            filo.move(filo.getAnchorX() - distance, filo.getAnchorY());
+        
+       break;
+       case RIGHT:
+         distance = x - getLastOgPoint()[0];
+        
+         for (float[] point: this.ogPoints)
+           point[0] += distance;
+          
+         for (int i = 0; i < this.ogPoints.length; i++)
+           arrayCopy(this.ogPoints[i], this.points[i]);
+           
+         for (FiloErba filo : this.bs)
+            filo.move(filo.getAnchorX() - distance, filo.getAnchorY());
+       break;
+       case UP:
+       case DOWN:
+       default:
+        break;
+     }
   }
   
   public void scaleX(float scale, Direction dir) {
@@ -206,7 +251,7 @@ class Montagna {
         
       case RIGHT:
         for (int i = 0; i < this.ogPoints.length; i++)
-          this.points[i][1] = this.getOgLastY() - (this.getOgLastY() - this.ogPoints[i][1]) * scale;
+          this.points[i][1] = this.getLastOgPoint()[1] - (this.getLastOgPoint()[1] - this.ogPoints[i][1]) * scale;
         break;
       case UP:
         for (int i = 0; i < this.ogPoints.length; i++)
@@ -264,8 +309,8 @@ class Montagna {
     return this.points[this.points.length-1][1];
   }
   
-  public float getOgLastY() {
-    return this.ogPoints[this.ogPoints.length-1][1];
+  public float[] getLastOgPoint() {
+    return this.ogPoints[this.ogPoints.length-1];
   }
   
   public color getColour() {
