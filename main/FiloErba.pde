@@ -62,16 +62,17 @@ class FiloErba {
   }
   
   void move(float newAnchorX, float newAnchorY) {
+    
+    float distX = newAnchorX - this.anchorx;
+    float distY = newAnchorY - this.anchory;
+    
     this.anchorx = newAnchorX;
     this.anchory = newAnchorY;
     
-    this.segments.clear();
-    for (int x = 0; x < this.nSegments; x++) {
-      segments.add(new float[]{anchorx, anchory+10*x});
+    for (float[] segment : this.segments) {
+      segment[0] += distX;
+      segment[1] += distY;
     }
-    
-    segments.get(0)[0] = anchorx;
-    segments.get(0)[1] = anchory;
   }
   
   float getAnchorX() {

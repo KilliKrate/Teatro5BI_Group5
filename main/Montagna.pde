@@ -167,7 +167,7 @@ class Montagna {
           arrayCopy(this.ogPoints[i], this.points[i]);
           
         for (FiloErba filo : this.bs)
-          filo.move(filo.getAnchorX(), filo.getAnchorY() - distance);
+          filo.move(filo.getAnchorX(), filo.getAnchorY() + distance);
         
         break;
         
@@ -180,7 +180,7 @@ class Montagna {
           arrayCopy(this.ogPoints[i], this.points[i]);
           
         for (FiloErba filo : this.bs)
-          filo.move(filo.getAnchorX(), filo.getAnchorY() - distance);
+          filo.move(filo.getAnchorX(), filo.getAnchorY() + distance);
           
       break;  
       case UP:
@@ -203,7 +203,7 @@ class Montagna {
             arrayCopy(this.ogPoints[i], this.points[i]);
           
           for (FiloErba filo : this.bs)
-            filo.move(filo.getAnchorX() - distance, filo.getAnchorY());
+            filo.move(filo.getAnchorX() + distance, filo.getAnchorY());
         
        break;
        case RIGHT:
@@ -216,7 +216,7 @@ class Montagna {
            arrayCopy(this.ogPoints[i], this.points[i]);
            
          for (FiloErba filo : this.bs)
-            filo.move(filo.getAnchorX() - distance, filo.getAnchorY());
+            filo.move(filo.getAnchorX() + distance, filo.getAnchorY());
        break;
        case UP:
        case DOWN:
